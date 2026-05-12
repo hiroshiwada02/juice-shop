@@ -76,8 +76,8 @@ export function login () {
         if (count === 0) {
           challengeUtils.solve(challenges.ephemeralAccountantChallenge)
         }
-      }).catch(() => {
-        throw new Error('Unable to verify challenges! Try again')
+      }).catch((error: Error) => {
+        console.error('Unable to verify ephemeralAccountantChallenge:', error.message)
       })
     }
   }

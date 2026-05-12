@@ -135,7 +135,7 @@ function hasEmail (token: { data: { email: string } }, email: string | RegExp) {
 
 async function checkPatternInFeedbackAndComplaints (
   challenge: Challenge,
-  fieldCriteria: any
+  fieldCriteria: string | object
 ): Promise<void> {
   const feedbackCheck = FeedbackModel.findAndCountAll({
     where: { comment: fieldCriteria }
@@ -143,8 +143,8 @@ async function checkPatternInFeedbackAndComplaints (
     if (count > 0) {
       challengeUtils.solve(challenge)
     }
-  }).catch(() => {
-    throw new Error('Unable to retrieve feedback details. Please try again')
+  }).catch((error: Error) => {
+    console.error('Unable to retrieve feedback details:', error.message)
   })
 
   const complaintCheck = ComplaintModel.findAndCountAll({
@@ -153,8 +153,8 @@ async function checkPatternInFeedbackAndComplaints (
     if (count > 0) {
       challengeUtils.solve(challenge)
     }
-  }).catch(() => {
-    throw new Error('Unable to retrieve complaint details. Please try again')
+  }).catch((error: Error) => {
+    console.error('Unable to retrieve complaint details:', error.message)
   })
 
   await Promise.all([feedbackCheck, complaintCheck])
@@ -221,8 +221,8 @@ function feedbackChallenge () {
     if (count === 0) {
       challengeUtils.solve(challenges.feedbackChallenge)
     }
-  }).catch(() => {
-    throw new Error('Unable to retrieve feedback details. Please try again')
+  }).catch((error: Error) => {
+    console.error('Unable to retrieve feedback details:', error.message)
   })
 }
 
